@@ -134,6 +134,6 @@ FOR EACH ROW EXECUTE FUNCTION atualizar_estoque();
 
 ## 👨‍💻 Autor Victor de Oliveira Gadelha
 
-Projeto desenvolvido para fins acadêmicos com Django, PostgreSQL, SQL avançado e Bootstrap.
+Projeto desenvolvido para fins acadêmicos com Django, PostgreSQL e Bootstrap.
 
 > 📄 Licença de uso acadêmico
