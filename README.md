@@ -1,209 +1,118 @@
 # 🍔 Sistema de Gerenciamento para Lanchonete
 
-Sistema web desenvolvido com **Python + Django + PostgreSQL** para gerenciamento de clientes, produtos, pedidos e relatórios interativos de uma lanchonete.
+> Sistema web acadêmico desenvolvido com **Python + Django + PostgreSQL** para gerenciamento de clientes, produtos, pedidos e relatórios interativos.
 
-O projeto foi desenvolvido com foco acadêmico utilizando:
-- CRUD completo
-- Relacionamentos entre tabelas
-- Controle de estoque
-- VIEW SQL
-- TRIGGER PostgreSQL
-- Relatórios dinâmicos
+![Python](https://img.shields.io/badge/Python-3.x-blue?style=flat-square&logo=python)
+![Django](https://img.shields.io/badge/Django-Framework-green?style=flat-square&logo=django)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue?style=flat-square&logo=postgresql)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?style=flat-square&logo=bootstrap)
 
 ---
 
-# 📚 Tecnologias Utilizadas
+## 📚 Tecnologias
 
-## Backend
-- Python 3
-- Django
-
-## Banco de Dados
-- PostgreSQL
-
-## Frontend
-- HTML5
-- Bootstrap 5
-
-## Banco / SQL
-- Views SQL
-- Triggers PostgreSQL
-- JOINs
-- Queries dinâmicas
+| Camada | Tecnologias |
+|--------|------------|
+| Backend | Python 3, Django |
+| Banco de dados | PostgreSQL, Views SQL, Triggers PL/pgSQL |
+| Frontend | HTML5, Bootstrap 5 |
 
 ---
 
-# ⚙️ Funcionalidades do Sistema
+## ⚙️ Funcionalidades
 
-## 👤 Clientes
-- Cadastro de clientes
-- Edição
-- Exclusão
-- Listagem
+### 👤 Clientes
+- Cadastro, edição, exclusão e listagem
 
----
+### 🍔 Produtos
+- Cadastro por categoria, controle de estoque, ativação/inativação
 
-## 🍔 Produtos
-- Cadastro de produtos
-- Controle de estoque
-- Categorias
-- Ativação/Inativação
+### 📦 Pedidos
+- Criação de pedidos com cálculo automático de subtotal/total e controle de status
 
----
+### 📊 Relatórios
+- Relatório consolidado de vendas com filtros por cliente, produto e status
 
-## 📦 Pedidos
-- Criação de pedidos
-- Adição de produtos
-- Cálculo automático de subtotal
-- Cálculo automático de total
-- Controle de status
+### 🛒 Estoque
+- Validação e redução automática via Trigger, com proteção contra estoque negativo
 
 ---
 
-## 📊 Relatórios
-- Relatório completo de vendas
-- Pesquisa interativa
-- Filtros por:
-  - cliente
-  - produto
-  - status
+## 🧱 Modelagem
+Cliente
+└── Pedido
+└── ItemPedido
+└── Produto
+└── Categoria
 
 ---
 
-## 🛒 Controle de Estoque
-- Validação de estoque
-- Redução automática de estoque
-- Proteção contra estoque negativo
-
----
-
-# 🗂️ Estrutura do Projeto
+## 🚀 Como rodar
 
 ```bash
-projeto_lanchonete/
-│
-├── clientes/
-├── produtos/
-├── pedidos/
-├── config/
-├── manage.py
-└── requirements.txt
-🧱 Modelagem do Sistema
-Relacionamentos
-Cliente
-   │
-   └── Pedido
-            │
-            └── ItemPedido
-                         │
-                         └── Produto
-                                      │
-                                      └── Categoria
-🚀 Como Rodar o Projeto
-1️⃣ Clonar o repositório
+# 1. Clone e entre na pasta
 git clone URL_DO_REPOSITORIO
-2️⃣ Entrar na pasta do projeto
 cd projeto_lanchonete
-3️⃣ Criar ambiente virtual
-Windows
+
+# 2. Ambiente virtual
 python -m venv venv
-4️⃣ Ativar ambiente virtual
-Windows
-venv\Scripts\activate
-5️⃣ Instalar dependências
-pip install django
-pip install psycopg2
-6️⃣ Criar banco PostgreSQL
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # Linux/Mac
 
-Criar banco chamado:
+# 3. Dependências
+pip install django psycopg2
 
-lanchonete_db
-7️⃣ Configurar banco no Django
-Arquivo:
-config/settings.py
-Configuração:
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lanchonete_db',
-        'USER': 'postgres',
-        'PASSWORD': 'SUA_SENHA',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-8️⃣ Rodar migrations
+# 4. Configure o banco em config/settings.py
+# NAME: lanchonete_db | USER: postgres | PASSWORD: SUA_SENHA
+
+# 5. Migrations e superusuário
 python manage.py makemigrations
 python manage.py migrate
-9️⃣ Criar superusuário
 python manage.py createsuperuser
-🔟 Rodar servidor
+
+# 6. Rodar
 python manage.py runserver
-🌐 Acessar sistema
-Sistema
-http://127.0.0.1:8000/
-Admin Django
-http://127.0.0.1:8000/admin
-🧠 Onde foi utilizada VIEW
-VIEW SQL criada:
+```
+
+Acesse em: `http://127.0.0.1:8000/` — Admin: `http://127.0.0.1:8000/admin`
+
+---
+
+## 🧠 VIEW SQL — Relatório de Vendas
+
+```sql
 CREATE OR REPLACE VIEW vw_relatorio_vendas AS
-
 SELECT
-
-    ped.id AS pedido_id,
-
-    c.nome AS cliente,
-
-    pr.nome AS produto,
-
+    ped.id         AS pedido_id,
+    c.nome         AS cliente,
+    pr.nome        AS produto,
     ip.quantidade,
-
     ip.subtotal,
-
     ped.data_pedido,
-
     ped.status
-
 FROM pedidos_itempedido ip
+JOIN pedidos_pedido  ped ON ped.id = ip.pedido_id
+JOIN clientes_cliente  c ON c.id  = ped.cliente_id
+JOIN produtos_produto pr ON pr.id = ip.produto_id;
+```
 
-JOIN pedidos_pedido ped
-ON ped.id = ip.pedido_id
+> Usada para gerar relatórios consolidados com JOINs entre tabelas, facilitando consultas analíticas.
 
-JOIN clientes_cliente c
-ON c.id = ped.cliente_id
+---
 
-JOIN produtos_produto pr
-ON pr.id = ip.produto_id;
-🎯 Objetivo da VIEW
+## ⚡ TRIGGER — Controle de Estoque
 
-A VIEW foi utilizada para:
-
-gerar relatório consolidado
-realizar JOINs entre tabelas
-facilitar consultas analíticas
-criar relatórios interativos
-⚡ Onde foi utilizada TRIGGER
-Função PostgreSQL:
+```sql
 CREATE OR REPLACE FUNCTION atualizar_estoque()
-RETURNS TRIGGER AS
-$$
-
+RETURNS TRIGGER AS $$
 DECLARE
-
     estoque_atual INTEGER;
-
 BEGIN
-
-    SELECT estoque
-    INTO estoque_atual
-    FROM produtos_produto
-    WHERE id = NEW.produto_id;
+    SELECT estoque INTO estoque_atual
+    FROM produtos_produto WHERE id = NEW.produto_id;
 
     IF estoque_atual < NEW.quantidade THEN
-
-        RAISE EXCEPTION
-        'Estoque insuficiente!';
-
+        RAISE EXCEPTION 'Estoque insuficiente!';
     END IF;
 
     UPDATE produtos_produto
@@ -211,56 +120,31 @@ BEGIN
     WHERE id = NEW.produto_id;
 
     RETURN NEW;
-
 END;
-
 $$ LANGUAGE plpgsql;
-Trigger
+
 CREATE TRIGGER trg_atualizar_estoque
+BEFORE INSERT ON pedidos_itempedido
+FOR EACH ROW EXECUTE FUNCTION atualizar_estoque();
+```
 
-BEFORE INSERT
-ON pedidos_itempedido
+> Garante integridade dos dados, impede estoque negativo e automatiza regras de negócio.
 
-FOR EACH ROW
+---
 
-EXECUTE FUNCTION atualizar_estoque();
-🎯 Objetivo da TRIGGER
+## 📌 Melhorias Futuras
 
-A trigger foi utilizada para:
+- [ ] Login e autenticação de usuários
+- [ ] Exportação para CSV / Excel
+- [ ] Dashboard com gráficos analíticos
+- [ ] API REST
+- [ ] Docker e deploy online
+- [ ] Sistema de comandas e área de caixa
 
-atualizar estoque automaticamente
-impedir estoque negativo
-garantir integridade dos dados
-automatizar regras de negócio
-📈 Pesquisa Interativa
+---
 
-O sistema possui:
+## 👨‍💻 Autor
 
-pesquisa dinâmica
-filtros personalizados
-relatórios interativos
-Filtros disponíveis:
-Cliente
-Produto
-Status
-📌 Melhorias Futuras
-Login e autenticação
-Exportação CSV/Excel
-Dashboard administrativo
-API REST
-Docker
-Deploy online
-Gráficos analíticos
-Sistema de comandas
-Área de caixa
-👨‍💻 Autor
+Projeto desenvolvido para fins acadêmicos com Django, PostgreSQL, SQL avançado e Bootstrap.
 
-Projeto desenvolvido para fins acadêmicos utilizando:
-
-Django
-PostgreSQL
-SQL avançado
-Bootstrap
-📄 Licença
-
-Projeto de uso acadêmico.
+> 📄 Licença de uso acadêmico
