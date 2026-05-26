@@ -132,18 +132,7 @@ FOR EACH ROW EXECUTE FUNCTION atualizar_estoque();
 
 ---
 
-## 📌 Melhorias Futuras
-
-- [ ] Login e autenticação de usuários
-- [ ] Exportação para CSV / Excel
-- [ ] Dashboard com gráficos analíticos
-- [ ] API REST
-- [ ] Docker e deploy online
-- [ ] Sistema de comandas e área de caixa
-
----
-
-## 👨‍💻 Autor
+## 👨‍💻 Autor Victor de Oliveira Gadelha
 
 Projeto desenvolvido para fins acadêmicos com Django, PostgreSQL, SQL avançado e Bootstrap.
 
