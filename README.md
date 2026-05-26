@@ -1,4 +1,4 @@
-# 🍔 Sistema de Gerenciamento para Lanchonete
+# Sistema de Gerenciamento para Pedidos
 
 > Sistema web acadêmico desenvolvido com **Python + Django + PostgreSQL** para gerenciamento de clientes, produtos, pedidos e relatórios interativos.
 
@@ -24,7 +24,7 @@
 ### 👤 Clientes
 - Cadastro, edição, exclusão e listagem
 
-### 🍔 Produtos
+### 📦 Produtos
 - Cadastro por categoria, controle de estoque, ativação/inativação
 
 ### 📦 Pedidos
