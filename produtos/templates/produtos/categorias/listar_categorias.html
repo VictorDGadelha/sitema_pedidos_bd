@@ -28,64 +28,39 @@
         Categorias
     </a>
 
-    <table class="table table-dark table-striped">
+    <a href="/produtos/"
+   class="btn btn-secondary mb-3">
 
+    Voltar
+    </a>
+
+<table class="table table-dark table-striped">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
-                <th>Preço</th>
-                <th>Estoque</th>
-                <th>Categoria</th>
-                <th>Status</th>
                 <th>Ações</th>
             </tr>
         </thead>
-
         <tbody>
-
-            {% for produto in categorias %}
-
+            {% for categoria in categorias %}
             <tr>
-
-                <td>{{ produto.id }}</td>
-                <td>{{ produto.nome }}</td>
-                <td>R$ {{ produto.preco }}</td>
-                <td>{{ produto.estoque }}</td>
-                <td>{{ produto.categoria.nome }}</td>
-
+                <td>{{ categoria.id }}</td>
+                <td>{{ categoria.nome }}</td>
                 <td>
-
-                    {% if produto.ativo %}
-                        Ativo
-                    {% else %}
-                        Inativo
-                    {% endif %}
-
-                </td>
-
-                <td>
-
-                    <a href="{% url 'editar_produto' produto.id %}"
+                    <a href="{% url 'editar_categoria' categoria.id %}"
                        class="btn btn-warning btn-sm">
-
                         Editar
                     </a>
 
-                    <a href="{% url 'excluir_produto' produto.id %}"
+                    <a href="{% url 'excluir_categoria' categoria.id %}"
                        class="btn btn-danger btn-sm">
-
                         Excluir
                     </a>
-
                 </td>
-
             </tr>
-
             {% endfor %}
-
         </tbody>
-
     </table>
 
 </body>
